@@ -1,4 +1,4 @@
-# JS-Patterns
+# JS-Microservices
 Hello! Let me quickly introduce you into the project. This is demonstration of splitting monolith into microservices.
 
 # Content
