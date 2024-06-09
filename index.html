@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Document</title>
+</head>
+<body>
+	<div class="flex-inline">
+		<button id="buttonAddUser">Add user</button>
+		<button id="buttonRemoveUser">Remove user</button>
+	</div>
+	<div class="flex-inline">
+		<input type="file" accept=".json" id="inputLoader">
+		<button id="buttonDownloadUsers">Export users</button>
+	</div>
+	<div class="flex-inline">
+		<button id="buttonClearRepository">Clear repository</button>
+	</div>
+	<div class="flex-inline">
+		<button id="buttonUpdateLog">Update log</button>
+		<button id="buttonClearLog">Clear log</button>
+	</div>
+	<h2>Log area:</h2>
+	<textarea name="" id="logArea" cols="30" rows="10" readonly="true"></textarea>
+	<script type="module" src="index.js"></script>
+</body>
+</html>
