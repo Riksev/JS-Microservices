@@ -10,6 +10,8 @@ For NPM:<br />
 For demonstration:<br />
 - index.js<br />
 <br />
+For tests:<br />
+- shoAdministration.test.js<br />
 For interfaces:<br />
 - interfaces.js<br />
 <br />
