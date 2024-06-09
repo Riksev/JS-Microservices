@@ -1,4 +1,4 @@
-const interfaces = require('./interfaces');
+const interfaces = require("./interfaces");
 
 class Logger extends interfaces.ILogger {
   #logMessages;
@@ -76,77 +76,78 @@ class UserRepository extends interfaces.IRepository {
     UserRepository.instance = this;
   }
 
-  async addUser(user) {
-    this.#users.push(user);
-		await this.createLog("User added: " + user.getName());
-    this.#saveUsers();
+  addUser(user) {
+    let hasInstance = false;
+    this.#users.forEach((item) => {
+      if (item.getName() == user.getName() && item.getAge() == user.getAge()) {
+        hasInstance = true;
+      }
+    });
+    if (!hasInstance) {
+      this.#users.push(user);
+      this.createLog("User added: " + user.getName() + "," + user.getAge());
+    } else {
+      this.createLog(
+        "User already exists: " + user.getName() + "," + user.getAge()
+      );
+    }
   }
 
-	async createLog(message) {
-		try {
-			const response = await fetch("http://localhost:3001/log", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({message: message}),
-			});
-			response.json();
-			console.log(new Date().toLocaleString() + " - " + "Success");
-		} catch (error) {
-			console.error(new Date().toLocaleString() + " - " + "Error:", error);
-			return new Array();
-		}
-	}
+  createLog(message) {
+    try {
+      fetch("http://localhost:3001/log", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: message }),
+      });
+      console.log(new Date().toLocaleString() + " - " + "Success");
+    } catch (error) {
+      console.error(new Date().toLocaleString() + " - " + "Error:", error);
+      return new Array();
+    }
+  }
 
   removeUser(name) {
-		let found = false;
+    let found = false;
     this.#users = this.#users.filter((user) => {
-			const checker = user.getName() !== name;
-			if (checker) {
-				found = true;
-			}
-			return checker;
-		});
-		if (found) {
-			this.createLog("User removed: " + name);
-		}
-		else {
-			this.createLog("User not found: " + name);
-		}
-    this.#saveUsers();
-  }
-
-	getRowData() {
-    return this.#users;
-  }
-
-  #saveUsers() {
-    let fileData = "Users: \n";
-    this.#users.forEach((user) => {
-      fileData += user.getInfo() + "\n";
+      const checker = user.getName() !== name;
+      if (checker) {
+        found = true;
+      }
+      return checker;
     });
+    if (found) {
+      this.createLog("User removed: " + name);
+    } else {
+      this.createLog("User not found: " + name);
+    }
+  }
+
+  getProcessedData() {
+    const usersInfo = new Array();
+    this.#users.forEach((user) => {
+      usersInfo.push(user.getInfo());
+    });
+    return usersInfo.join("\n");
+  }
+
+  getRowData() {
+    return this.#users;
   }
 
   clearRepository() {
     this.#users = new Array();
-		this.createLog("Repository was cleared");
+    this.createLog("Repository was cleared");
     return true;
   }
 
   loadUsers(users) {
-		users.forEach((element) => {
-			const user = new User(element['name'], element['age']);
-			let hasInstance = false;
-			this.#users.forEach(item => {
-				if (item.getName() == user.getName() && item.getAge() == user.getAge()) {
-					hasInstance = true;
-				}
-			});
-			if (!hasInstance) {
-				this.addUser(user);
-			}
-		});
+    users.forEach((element) => {
+      const user = new User(element["name"], element["age"]);
+      this.addUser(user);
+    });
   }
 }
 
@@ -172,13 +173,13 @@ class UserRepositoryFacade {
     this.#userRepository.removeUser(name);
   }
 
-	getUsersInfo() {
-		return this.#userRepository.getProcessedData();
-	}
+  getUsersInfo() {
+    return this.#userRepository.getProcessedData();
+  }
 
-	getUsers() {
-		return this.#userRepository.getRowData();
-	}
+  getUsers() {
+    return this.#userRepository.getRowData();
+  }
 
   clearRepository() {
     return this.#userRepository.clearRepository();
@@ -190,6 +191,6 @@ class UserRepositoryFacade {
 }
 
 module.exports = {
-	Logger,
-	UserRepositoryFacade,
+  Logger,
+  UserRepositoryFacade,
 };
