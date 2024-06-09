@@ -34,10 +34,6 @@ class Logger extends interfaces.ILogger {
     this.log("Log cleared");
     return true;
   }
-
-  update(message) {
-    this.log(message);
-  }
 }
 
 class User {
@@ -85,15 +81,15 @@ class UserRepository extends interfaces.IRepository {
     });
     if (!hasInstance) {
       this.#users.push(user);
-      this.createLog("User added: " + user.getName() + "," + user.getAge());
+      this.#createLog("User added: " + user.getName() + "," + user.getAge());
     } else {
-      this.createLog(
+      this.#createLog(
         "User already exists: " + user.getName() + "," + user.getAge()
       );
     }
   }
 
-  createLog(message) {
+  #createLog(message) {
     try {
       fetch("http://localhost:3001/log", {
         method: "POST",
@@ -119,9 +115,9 @@ class UserRepository extends interfaces.IRepository {
       return checker;
     });
     if (found) {
-      this.createLog("User removed: " + name);
+      this.#createLog("User removed: " + name);
     } else {
-      this.createLog("User not found: " + name);
+      this.#createLog("User not found: " + name);
     }
   }
 
@@ -139,7 +135,7 @@ class UserRepository extends interfaces.IRepository {
 
   clearRepository() {
     this.#users = new Array();
-    this.createLog("Repository was cleared");
+    this.#createLog("Repository was cleared");
     return true;
   }
 

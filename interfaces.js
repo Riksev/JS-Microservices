@@ -1,6 +1,6 @@
 class IRepository {
-  loadFrom(data) {}
-  getData() {}
+  getProcessedData() {}
+	getRowData() {}
   clearRepository() {}
 }
 
